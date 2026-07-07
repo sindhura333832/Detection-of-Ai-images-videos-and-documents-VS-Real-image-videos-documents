@@ -1,0 +1,38 @@
+============================================================
+AI IMAGE DETECTOR RESULTS
+Created: 2026-03-01 16:34:19.380763
+============================================================
+
+This program analyzes images to detect if they are AI-generated or real photos.
+It uses grayscale conversion and texture analysis.
+
+
+[IMAGE] mytest.jpg
+  Mean Intensity: 174.46
+  Std Intensity: 88.88
+  Edge Density: 0.0089
+  Avg Edge Strength: 12.82
+  Texture Variance: 440.43
+  Noise Estimate: 6.42
+  Prediction: LIKELY REAL PHOTO
+----------------------------------------
+
+[IMAGE] mytest.jpg
+  Mean Intensity: 174.46
+  Std Intensity: 88.88
+  Edge Density: 0.0089
+  Avg Edge Strength: 12.82
+  Texture Variance: 440.43
+  Noise Estimate: 6.42
+  Prediction: LIKELY REAL PHOTO
+----------------------------------------
+
+[IMAGE] mytest.jpg
+  Mean Intensity: 174.46
+  Std Intensity: 88.88
+  Edge Density: 0.0089
+  Avg Edge Strength: 12.82
+  Texture Variance: 440.43
+  Noise Estimate: 6.42
+  Prediction: LIKELY REAL PHOTO
+----------------------------------------

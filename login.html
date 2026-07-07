@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AI Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+        
+        @keyframes moveBackground {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 100px 100px;
+            }
+        }
+        
+        /* Floating shapes */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+            }
+        }
+        
+        .login-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+            backdrop-filter: blur(10px);
+            margin: 20px;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .login-header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-body {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            animation: shake 0.5s;
+        }
+        
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .credentials-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+        }
+        
+        .credentials-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .credentials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        
+        .credential-card {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .credential-card:hover {
+            transform: translateY(-2px);
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .credential-username {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .credential-password {
+            color: #666;
+            font-size: 12px;
+            font-family: monospace;
+            margin-top: 5px;
+        }
+        
+        .demo-icon {
+            font-size: 12px;
+            color: #667eea;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 10px;
+            }
+            
+            .login-body {
+                padding: 30px;
+            }
+            
+            .credentials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes" id="shapes"></div>
+    
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>🤖 AI Detector</h1>
+                <p>Detect AI-generated images and videos</p>
+            </div>
+            
+            <div class="login-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="POST" id="loginForm">
+                    <div class="form-group">
+                        <label>👤 Username</label>
+                        <input type="text" name="username" id="username" required placeholder="Enter your username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🔒 Password</label>
+                        <input type="password" name="password" id="password" required placeholder="Enter your password">
+                    </div>
+                    
+                    <button type="submit" class="login-btn">🔐 Login</button>
+                </form>
+                
+                <div class="credentials-section">
+                    <div class="credentials-title">📝 Available Login Credentials</div>
+                    <div class="credentials-grid">
+                        <div class="credential-card" onclick="fillCredentials('sindhura12', 'sindhura12')">
+                            <div class="credential-username">sindhura12</div>
+                            <div class="credential-password">•••••••••</div>
+                            <div class="demo-icon">👤 Click to use</div>
+                        </div>
+                        <div class="credential-card" onclick="fillCredentials('admin', 'admin123')">
+                            <div class="credential-username">admin</div>
+                            <div class="credential-password">•••••••</div>
+                            <div class="demo-icon">👤 Click to use</div>
+                        </div>
+                        <div class="credential-card" onclick="fillCredentials('user', 'user123')">
+                            <div class="credential-username">user</div>
+                            <div class="credential-password">•••••••</div>
+                            <div class="demo-icon">👤 Click to use</div>
+                        </div>
+                        <div class="credential-card" onclick="fillCredentials('demo', 'demo123')">
+                            <div class="credential-username">demo</div>
+                            <div class="credential-password">•••••••</div>
+                            <div class="demo-icon">👤 Click to use</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating shapes
+        function createShapes() {
+            const shapesContainer = document.getElementById('shapes');
+            for (let i = 0; i < 15; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'shape';
+                const size = Math.random() * 100 + 50;
+                shape.style.width = size + 'px';
+                shape.style.height = size + 'px';
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.animationDelay = Math.random() * 5 + 's';
+                shape.style.animationDuration = Math.random() * 10 + 10 + 's';
+                shapesContainer.appendChild(shape);
+            }
+        }
+        
+        function fillCredentials(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            // Highlight effect
+            const cards = document.querySelectorAll('.credential-card');
+            cards.forEach(card => {
+                if (card.innerHTML.includes(username)) {
+                    card.style.transform = 'scale(1.05)';
+                    card.style.borderColor = '#667eea';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 300);
+                }
+            });
+        }
+        
+        createShapes();
+    </script>
+</body>
+</html>
